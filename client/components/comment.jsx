@@ -2,6 +2,7 @@
 import Avatar from './avatar'
 import ReplyForm from './replyForm'
 import { useState } from 'react'
+import { apiFetch } from '../utils/api'
 
 export default function Comment({ comment, onUpdate }) {
   const [showReply, setShowReply] = useState(false)
@@ -11,7 +12,7 @@ export default function Comment({ comment, onUpdate }) {
     if (isLiking) return
     setIsLiking(true)
     try {
-      await fetch(`/api/comments/${comment.id}/like`, { method: 'POST' })
+      await apiFetch(`/comments/${comment.id}/like`, { method: 'POST' })
       if (onUpdate) onUpdate() // Refresh comments to show updated like count
     } catch (error) {
       console.error('Failed to like comment:', error)

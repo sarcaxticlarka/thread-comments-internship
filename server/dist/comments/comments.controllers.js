@@ -1,5 +1,6 @@
 import prisma from "../lib/prisma.js";
 import { z } from 'zod/v4';
+import buildTree from '../utils/buildTree.js';
 const commentSchema = z.object({
     text: z.string().min(2).max(1000),
     author: z.string().min(2).max(100)
@@ -9,13 +10,9 @@ const idSchema = z.object({
 });
 export const getComments = async (_req, res) => {
     try {
-        const comments = await prisma.comment.findMany({
-            orderBy: { createdAt: 'desc' },
-            include: {
-                children: true,
-            }
-        });
-        res.json(comments);
+        const comments = await prisma.comment.findMany();
+        const commentsWithChildren = buildTree(comments);
+        res.json(commentsWithChildren);
     }
     catch (error) {
         console.error(error);

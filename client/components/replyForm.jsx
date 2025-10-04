@@ -1,5 +1,6 @@
 'use client'
 import { useState } from 'react'
+import { apiFetch } from '../utils/api'
 
 export default function ReplyForm({ parentId, onSuccess, onCancel }) {
   const [text, setText] = useState('')
@@ -12,9 +13,8 @@ export default function ReplyForm({ parentId, onSuccess, onCancel }) {
     
     setIsSubmitting(true)
     try {
-      await fetch(`/api/comments/${parentId}/reply`, {
+      await apiFetch(`/comments/${parentId}/reply`, {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ text, author }),
       })
       setText('')

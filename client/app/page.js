@@ -124,6 +124,7 @@
 import CommentList from '../components/commentList'
 import { useEffect, useState } from 'react'
 import { User, Edit2, MessageCircle } from 'lucide-react'
+import { apiFetch } from '../utils/api'
 
 export default function HomePage() {
   const [comments, setComments] = useState([])
@@ -133,7 +134,7 @@ export default function HomePage() {
 
   const fetchComments = async () => {
     try {
-      const res = await fetch('/api/comments')
+      const res = await apiFetch('/comments')
       const data = await res.json()
       setComments(data)
     } catch (error) {
@@ -151,9 +152,8 @@ export default function HomePage() {
 
     setIsLoading(true)
     try {
-      await fetch('/api/comments', {
+      await apiFetch('/comments', {
         method: 'POST',
-        headers: {'Content-Type': 'application/json'},
         body: JSON.stringify({ text, author }),
       })
       setText('')
