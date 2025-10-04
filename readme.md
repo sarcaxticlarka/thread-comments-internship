@@ -1,6 +1,315 @@
-# 💬 Thread Comments System# 💬 Thread Comments System
+# 💬 Thread Comments System
 
-A modern, scalable threaded comments system built with **Turborepo** monorepo architecture, featuring lazy loading, authentication, and real-time interactions with unlimited nesting depth.A modern, scalable threaded comments system built with TypeScript, Next.js, Express, Prisma, and PostgreSQL. Features lazy loading, authentication, and real-time interactions.
+A modern, scalable threaded comments system built with a **Turborepo** monorepo architecture, featuring lazy loading, authentication, and real-time interactions with unlimited nesting depth.
+
+## 🏗️ Architecture
+
+This project uses **Turborepo** to manage a monorepo with two main packages:
+- **Client**: A Next.js 15 React frontend with Tailwind CSS.
+- **Server**: A TypeScript Express.js backend with Prisma ORM.
+
+## 🚀 Quick Start
+
+### Prerequisites
+- **Node.js** 18+
+- **PostgreSQL** database
+- **npm** (recommended) or yarn
+
+### One-Command Setup
+```bash
+# Clone repository
+git clone https://github.com/sarcaxticlarka/thread-comments-internship.git
+cd thread-comments-internship
+
+# Install all dependencies for both client and server
+npm install
+
+# Set up environment variables (see Environment Setup below)
+# Then build and start everything
+npm run start
+```
+
+The `npm run start` command will:
+1. Build both client and server applications using Turborepo.
+2. Start the production server (Express.js backend).
+3. Start the production client (Next.js frontend).
+
+## 🛠️ Development
+
+### Development Mode
+```bash
+# Start both client and server in development mode
+npm run dev
+```
+
+This runs:
+- **Server**: Express.js with hot reload on `http://localhost:3001`
+- **Client**: Next.js with hot reload on `http://localhost:3000`
+
+### Individual Package Commands
+```bash
+# Build everything
+npm run build
+
+# Clean build artifacts
+npm run clean
+
+# Database operations
+npm run db:push          # Push schema to database
+npm run db:generate      # Generate Prisma client
+npm run db:studio        # Open Prisma Studio
+npm run db:migrate       # Run migrations
+npm run db:seed          # Seed database with sample data
+```
+
+## ⚙️ Environment Setup
+
+### Server Environment
+Create a `server/.env` file with the following:
+```env
+# Database
+DATABASE_URL="postgresql://username:password@localhost:5432/thread_comments"
+
+# JWT
+JWT_SECRET="your-super-secret-jwt-key"
+
+# Server
+PORT=3001
+NODE_ENV=development
+```
+
+### Client Environment
+Create a `client/.env.local` file with the following:
+```env
+# API Configuration
+NEXT_PUBLIC_API_URL=http://localhost:3001/api
+```
+
+## 🗄️ Database Setup
+
+1. **Create a PostgreSQL database**:
+   ```bash
+   createdb thread_comments
+   ```
+
+2. **Configure the `DATABASE_URL`** in `server/.env`.
+
+3. **Initialize the database**:
+   ```bash
+   npm run db:push      # Create tables
+   npm run db:generate  # Generate Prisma client
+   npm run db:seed      # Add sample data (optional)
+   ```
+
+## 📦 Tech Stack
+
+### Monorepo Management
+- **Turborepo** - Build system and task orchestration
+- **npm Workspaces** - Package management
+
+### Frontend (Client)
+- **Next.js 15** - React framework with App Router
+- **React 19** - UI library
+- **Tailwind CSS 4** - Utility-first CSS framework
+- **TypeScript** - Type safety (via JSConfig)
+
+### Backend (Server)
+- **Node.js** - JavaScript runtime
+- **Express.js** - Web framework
+- **TypeScript** - Type safety and modern JavaScript features
+- **Prisma** - Database ORM and migrations
+- **PostgreSQL** - Relational database
+- **JWT** - Authentication tokens
+
+### Development Tools
+- **ESLint** - Code linting
+- **Prettier** - Code formatting
+- **PostCSS** - CSS processing
+- **Docker** - Containerization support
+
+## 🎯 Key Features
+
+### Comments System
+- **Unlimited nesting depth** - Comments can be nested infinitely.
+- **Lazy loading** - Load replies on demand for performance.
+- **Real-time updates** - Instant comment posting and loading.
+- **User authentication** - JWT-based authentication with user sessions.
+
+### Performance Optimizations
+- **Tree building algorithm** - Efficient comment hierarchy construction.
+- **Caching** - Turborepo build caching for faster builds.
+- **Component-based architecture** - Reusable React components.
+
+### Developer Experience
+- **Unified commands** - Single commands to manage the entire monorepo.
+- **Type safety** - Full TypeScript support across the frontend and backend.
+- **Hot reload** - Instant development feedback.
+- **Database tooling** - Prisma Studio, migrations, and seeding.
+
+## 📁 Project Structure
+
+```
+thread-comments-internship/
+├── package.json                 # Root Turborepo configuration
+├── turbo.json                   # Turborepo build configuration
+├── README.md                    # This file
+│
+├── client/                      # Next.js Frontend Package
+│   ├── package.json             # Client dependencies and scripts
+│   ├── next.config.mjs          # Next.js configuration
+│   ├── postcss.config.mjs       # PostCSS configuration
+│   ├── app/                     # Next.js App Router
+│   │   ├── layout.js            # Root layout
+│   │   ├── page.js              # Home page
+│   │   └── globals.css          # Global styles
+│   ├── components/              # React Components
+│   │   ├── comment.jsx          # Individual comment display
+│   │   ├── commentList.jsx      # Comments container
+│   │   ├── replyForm.jsx        # Reply input form
+│   │   └── avatar.jsx           # User avatar component
+│   └── utils/                   # Client utilities
+│       └── api.js               # API fetch wrapper
+│
+└── server/                      # Express.js Backend Package
+    ├── package.json             # Server dependencies and scripts
+    ├── tsconfig.json            # TypeScript configuration
+    ├── prisma/                  # Database Schema and Migrations
+    │   └── schema.prisma        # Database schema definition
+    └── src/                     # TypeScript source code
+        ├── index.ts             # Express server entry point
+        ├── seed.ts              # Database seeding script
+        ├── comments/            # Comments feature
+        │   ├── comments.controllers.ts
+        │   └── comments.routes.ts
+        ├── lib/                 # Core libraries
+        │   └── prisma.ts
+        └── utils/               # Server utilities
+            ├── buildTree.ts     # Comment tree builder
+            └── env.ts           # Environment variable handling
+```
+
+## 🔧 Available Scripts
+
+### Root Level (Turborepo)
+```bash
+npm run dev          # Start both apps in development mode
+npm run build        # Build both apps for production
+npm run start        # Build and start both apps in production
+npm run clean        # Clean all build artifacts
+npm run setup        # Initial project setup script
+```
+
+### Database Scripts (run from root)
+```bash
+npm run db:push      # Push Prisma schema to database
+npm run db:generate  # Generate Prisma client
+npm run db:studio    # Open Prisma Studio (database GUI)
+npm run db:migrate   # Run database migrations
+npm run db:seed      # Seed database with sample data
+npm run db:reset     # Reset database (caution: deletes data)
+```
+
+## 🐳 Docker Support
+
+The project includes Docker configuration for containerized deployment:
+
+```bash
+# Build and run with Docker Compose
+docker-compose up --build
+
+# Or build individual containers
+docker build -t thread-comments-client ./client
+docker build -t thread-comments-server ./server
+```
+
+## 🤝 API Integration
+
+The client uses an environment-based API wrapper located at `client/utils/api.js`:
+
+```javascript
+// Automatically uses NEXT_PUBLIC_API_URL from environment
+import { apiRequest } from '../utils/api';
+
+// Example usage
+const comments = await apiRequest('/comments');
+const newComment = await apiRequest('/comments/create', {
+  method: 'POST',
+  body: { content: 'Hello world!', parentId: null }
+});
+```
+
+## 🔍 Troubleshooting
+
+### Common Issues
+
+**Build failures:**
+```bash
+npm run clean
+npm install
+npm run build
+```
+
+**Database connection issues:**
+1. Verify PostgreSQL is running.
+2. Check `DATABASE_URL` in `server/.env`.
+3. Run `npm run db:push` to create tables.
+
+**Port conflicts:**
+- Server runs on port 3001.
+- Client runs on port 3000.
+- Check if these ports are available or update the configurations.
+
+**Environment variables:**
+- Ensure `server/.env` and `client/.env.local` are properly configured.
+- Restart the development servers after any environment changes.
+
+## 📝 Development Workflow
+
+1. **Clone and set up**:
+   ```bash
+   git clone https://github.com/sarcaxticlarka/thread-comments-internship.git
+   cd thread-comments-internship
+   npm install
+   ```
+
+2. **Configure the environment** (see Environment Setup above).
+
+3. **Initialize the database**:
+   ```bash
+   npm run db:push
+   npm run db:generate
+   ```
+
+4. **Start development**:
+   ```bash
+   npm run dev
+   ```
+
+5. **Build for production**:
+   ```bash
+   npm run build
+   npm run start
+   ```
+
+## 🚀 Production Deployment
+
+For production deployment:
+
+1. **Set production environment variables.**
+2. **Build the applications**:
+   ```bash
+   npm run build
+   ```
+3. **Start the production servers**:
+   ```bash
+   npm run start
+   ```
+
+The unified Turborepo setup ensures consistent builds and deployments across all environments.
+
+---
+
+Built with ❤️ using Turborepo, Next.js, and TypeScript.
 
 
 
